@@ -1,11 +1,6 @@
 # LED Sequence Controller for MAX78000 FTHR Board
 
 ## Project Overview
-This project implements an interrupt-driven LED sequence controller on the MAX78000 FTHR board. The system features two distinct LED patterns that can be toggled instantly via a push button with proper debouncing
-
-# LED Sequence Controller for MAX78000 FTHR Board
-
-## Project Overview
 This project implements an interrupt-driven LED sequence controller on the MAX78000 FTHR board. The system features two distinct LED patterns that can be toggled instantly via a push button with proper debouncing.
 
 ## Features
@@ -20,6 +15,15 @@ This project implements an interrupt-driven LED sequence controller on the MAX78
 - MAX78000 FTHR Evaluation Board
 - 8 LEDs connected to specified GPIO pins
 - Push button (SW1 on FTHR board)
+
+## File Structure
+
+| File             | Description                                        |
+|------------------|----------------------------------------------------|
+| `main.c`         | Main program: initializes LEDs, button, timer.     |
+| `ledblink.c`     | LED control logic (Morse & shift patterns).        |
+| `ledblink.h`     | Header file for LED functions.                     |
+| `Makefile`       | Build configuration for MAX78000 SDK.              |
 
 ## LED Pin Assignments
 | LED | GPIO Port | Pin    |
@@ -50,3 +54,37 @@ Displays "C O E" in Morse code using all 8 LEDs:
 
 ### Rotating Pattern (Mode 1)
 Creates a "moving dark spot" effect where one LED is off while all others are on:
+
+11111110 → 11111101 → 11111011 → 11110111 →
+11101111 → 11011111 → 10111111 → 01111111 →
+(Repeat)
+
+- Each pattern displays for 100ms
+- Creates smooth rotating animation
+
+## System Architecture
+
+### Interrupt Structure
+1. **GPIO Interrupt** - Button press detection
+2. **Timer Interrupt** - 100ms pattern updates
+
+### Key Components
+- **State Machine**: Pattern progression via array indexing
+- **Debounce Logic**: 50ms time-based debouncing
+- **Multi-Port GPIO**: Simultaneous control of LEDs across different ports
+- **Low-Power Design**: CPU sleeps between interrupts
+
+## Code Structure
+
+### Files
+- `main.c` - System initialization, interrupt handlers, main loop
+- `ledblink.h` - Type definitions and function declarations  
+- `ledblink.c` - LED control functions and pattern definitions
+
+### Key Functions
+
+#### Main Application
+```c
+void gpio_isr(void *cbdata)      // Button interrupt handler
+void TMR0_IRQHandler(void)       // Timer interrupt handler  
+int main(void)                   // System initialization
