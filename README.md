@@ -1,6 +1,6 @@
 # LED Sequence Controller for MAX78000 FTHR Board
 
-## Project Overview
+## Overview
 This project implements an interrupt-driven LED sequence controller on the MAX78000 FTHR board. The system features two distinct LED patterns that can be toggled instantly via a push button with proper debouncing.
 
 ## Features
